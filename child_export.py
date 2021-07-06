@@ -10,6 +10,38 @@ parentHome = parent.location[0:]
 parentRot = parent.rotation_euler[0:]
 origin = (0.0, 0.0, 0.0)
 
+
+def add_empties():
+    armature = bpy.context.object
+    if armature.type != 'ARMATURE':
+        return
+    empty_parent = bpy.data.objects.new('skeleton.objs',None)
+    empty_parent.empty_display_size = 4
+    bpy.context.scene.collection.objects.link(empty_parent)
+    empty_parent.name = 'skeleton.objs'
+    empty_parent.matrix_world = armature.matrix_world.copy()
+    dict = {}
+    for bone in skeleton.pose.bones:
+        empty = bpy.data.objects.new(bone.name, None)
+        empty.empty_display_size = 0.25
+        empty.parent = empty_parent
+        empty.matrix_world = armature.matrix_world @ bone.matrix
+        bpy.context.scene.collection.objects.link(empty)
+        dict[bone.name] = empty
+    for bone in skeleton.pose.bones:
+        parent = bone.parent
+        if parent is None:
+            continue
+        empty = dict.get(bone.name, None)
+        empty_parent = dict.get(parent.name, None)
+        if empty is None or empty_parent is None:
+            continue
+        m = empty.matrix_world.copy()
+        empty.parent = empty_parent
+        empty.matrix_world = m
+
+
+
 def ExportChildren():
     parent.location = origin
     for child in parent.children:
