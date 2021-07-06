@@ -1,3 +1,6 @@
+# This file has misc functions to visualize armatures via empties with accessible bone matrices,
+# convert particle systems into transform hierarchies and merge them or export them as file, etc
+
 import bpy
 import bmesh
 from mathutils import Vector
