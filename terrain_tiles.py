@@ -1,3 +1,6 @@
+# This file does many things: creating vertex weights, randomizing weights, bleeding weights of neighboring tiles into each other, calculating projected uvs of objects en masse, etc
+
+
 import bpy
 import bmesh
 import random
